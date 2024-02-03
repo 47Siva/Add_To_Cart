@@ -61,46 +61,48 @@ public class AddToCartController {
 			logger.info("test push..");
 			apiResponse.setData(responseOrderDTO);
 			apiResponse.setStatus(HttpStatus.OK.value());
-
+			apiResponse.setMessage("Oerder Placed Successfully");
 		} else {
 			logger.info("Customer not login ");
-			apiResponse.setError("Customer not loged in");
+			apiResponse.setMessage("Customer not loged in");
 			apiResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
 		}
 
 		return ResponseEntity.ok(apiResponse);
 	}
 
-    // get all product api
+	// get all product api
 	@GetMapping(value = "/getAllProducts")
 	public ResponseEntity<APIResponse> getAllProducts() {
 
 		List<Product> productList = addToCartService.getAllProducts();
 		APIResponse apiResponse = new APIResponse();
-		if(productList!=null) {
-		apiResponse.setData(productList);
-		apiResponse.setStatus(HttpStatus.OK.value());
-		}else {
+		if (productList != null) {
+			apiResponse.setData(productList);
+			apiResponse.setStatus(HttpStatus.OK.value());
+			apiResponse.setMessage("Products is Present");
+		} else {
 			apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
-			apiResponse.setError("products not found");
+			apiResponse.setMessage("products not found");
 		}
 		return ResponseEntity.ok(apiResponse);
 	}
-	
-	//get oreder detiles in orde id 
+
+	// get oreder detiles in orde id
 	@GetMapping(value = "getById")
-	public ResponseEntity<APIResponse> getOrderDetiles(int orderId){
+	public ResponseEntity<APIResponse> getOrderDetiles(int orderId) {
 		Order order = addToCartService.getOrderDetail(orderId);
 		APIResponse apiResponse = new APIResponse();
-		
-		if(order!= null) {
+
+		if (order != null) {
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setData(order);
-		}else {
+			apiResponse.setMessage("Order is present");
+		} else {
 			apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-			apiResponse.setError("Oreder Id not Found");
+			apiResponse.setMessage("Oreder Id not Found");
 		}
-		
-        return ResponseEntity.ok(apiResponse);
+
+		return ResponseEntity.ok(apiResponse);
 	}
 }

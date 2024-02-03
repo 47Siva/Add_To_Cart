@@ -38,8 +38,8 @@ public class JwtUtil {
 
 		// clamis
 		Claims claims = Jwts.claims().setIssuer(ISSUER).setIssuedAt(issuedAt).setExpiration(expiryAt);
-//		UserLogin user = userLoginRepository.findByUsername(userLogin.getName());
-		
+
+		//		UserLogin user = userLoginRepository.findByUsername(userLogin.getName());
 		Optional<UserLogin> userLogin2 = userLoginRepository.findById(login.getId());
 		UserLogin user = userLogin2.get();
 		claims.put("name", user.getName());

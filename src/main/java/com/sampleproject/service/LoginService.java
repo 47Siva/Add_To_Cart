@@ -70,9 +70,10 @@ public class LoginService {
 		if (userLoginEntity != null) {
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setData(userLoginEntity);
+			apiResponse.setMessage("login successful");
 		} else {
 			apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-			apiResponse.setError("bad request");
+			apiResponse.setMessage("User Not Register Somthinh... wants worng");
 		}
 
 		return apiResponse;
@@ -94,8 +95,7 @@ public class LoginService {
 		
 
 		// response
-		if (userLogin != null) {
-			apiResponse.setData("Loged in");
+		if (userLogin != null && userLogin.getPassword().equals(loginRequestDto.getPassword()) && userLogin.getUsername().equals(loginRequestDto.getUsername()) ) {
 			apiResponse.setStatus(HttpStatus.OK.value());
 			String token = jwtutil.generateJwt(userLogin);
 
@@ -104,11 +104,12 @@ public class LoginService {
 			data.put("Token", token);
 
 			apiResponse.setData(data);
+			apiResponse.setMessage("Login successful");
 			return apiResponse;
 		} else {
 			apiResponse.setData("User login failed");
 			apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-			apiResponse.setError("incorrect passward or emailId");
+			apiResponse.setMessage("incorrect passward or emailId");
 			return apiResponse;
 		}
 

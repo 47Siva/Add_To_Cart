@@ -9,6 +9,6 @@ public class APIResponse {
 	
 	private Object data  ;
 	
-	private Object error;
+	private Object message;
 	
 }
