@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sampleproject.entity.Customer;
+import com.sampleproject.entity.Login;
 import com.sampleproject.entity.UserLogin;
 import com.sampleproject.repositroy.UserLoginRepository;
 
@@ -24,7 +24,7 @@ public class JwtUtil {
 	private static String secret = "this is secret";
 	private static long expiryDuration = 60 * 60;
 
-	public String generateJwt(Customer userLogin) {
+	public String generateJwt(Login login) {
 
 		long millTime = System.currentTimeMillis();
 		long expiryTime = millTime + expiryDuration * 1000;
@@ -32,18 +32,18 @@ public class JwtUtil {
 		Date issuedAt = new Date(millTime);
 		Date expiryAt = new Date(expiryTime);
 
-		int integer = userLogin.getId();
+		int integer = login.getId();
 		String issuer = Integer.toString(integer);
 		String ISSUER = issuer;
 
 		// clamis
 		Claims claims = Jwts.claims().setIssuer(ISSUER).setIssuedAt(issuedAt).setExpiration(expiryAt);
-		Optional<UserLogin> user = userLoginRepository.findByUsername(userLogin.getName());
+//		UserLogin user = userLoginRepository.findByUsername(userLogin.getName());
 		
-		UserLogin user2 = user.get();
-		
-		claims.put("name", user2.getName());
-		claims.put("email_Id", user2.getEmailId());
+		Optional<UserLogin> userLogin2 = userLoginRepository.findById(login.getId());
+		UserLogin user = userLogin2.get();
+		claims.put("name", user.getName());
+		claims.put("email_Id", user.getEmailId());
 
 		// generat jwt using claims
 		return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, secret).compact();

@@ -36,7 +36,7 @@ public class Order {
 	@JoinColumn(name = "customer_id", referencedColumnName = "id")
 	private Customer customer;
 
-	@OneToMany(fetch = FetchType.EAGER, targetEntity = ShoppingCart.class, cascade = CascadeType.ALL)
+	@OneToMany (fetch = FetchType.EAGER ,targetEntity = ShoppingCart.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "order_id", referencedColumnName = "id")
 	private List<ShoppingCart> cartItems;
 
@@ -45,5 +45,7 @@ public class Order {
 		this.customer = customer;
 		this.cartItems = cartItems;
 	}
+	
+	
 
 }

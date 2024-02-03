@@ -9,9 +9,11 @@ import com.sampleproject.entity.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
-	public Customer getCustomerByEmailAndName(String email, String name);
+	@Query(value = "select * from customer as c where c.email =:customerEmail and c.name =:customerName",nativeQuery = true)
+	public Customer findByNameAndEmail(String customerEmail, String customerName);
 
-	@Query(value = "select * from customer as u where u.email=:username and u.password=:password",nativeQuery = true)
-	public Customer findOneByUserNameAndPassword(String username, String password);
+	@Query(value = "select *from customer as c where c.email =:username",nativeQuery = true)
+	public Customer findByUserName(String username);
+	
 
 }

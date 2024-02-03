@@ -11,8 +11,10 @@ import com.sampleproject.common.APIResponse;
 import com.sampleproject.dto.LoginRequestDto;
 import com.sampleproject.dto.SignUpRequestDto;
 import com.sampleproject.entity.Customer;
+import com.sampleproject.entity.Login;
 import com.sampleproject.entity.UserLogin;
 import com.sampleproject.repositroy.CustomerRepository;
+import com.sampleproject.repositroy.LoginRepository;
 import com.sampleproject.repositroy.UserLoginRepository;
 import com.sampleproject.util.JwtUtil;
 
@@ -25,7 +27,10 @@ public class LoginService {
 	UserLoginRepository userLoginRepository;
 	
 	@Autowired
-	CustomerRepository loginPageRepository;
+	CustomerRepository customerRepository;
+	
+	@Autowired
+	LoginRepository loginRepository;
 
 	@Autowired
 	JwtUtil jwtutil;
@@ -45,15 +50,21 @@ public class LoginService {
 		userLoginEntity.setPnoneNumber(signUpRequestDto.getPhoneNumber());
 		userLoginEntity.setPassward(signUpRequestDto.getPassward());
 		
-		Customer loginPage = new Customer();
-		loginPage.setEmail(signUpRequestDto.getEmailId());
-		loginPage.setPassword(signUpRequestDto.getPassward());
-		loginPage.setName(signUpRequestDto.getName());
+		//userlogin to customer save
+		Customer customer = new Customer();
+		customer.setEmail(signUpRequestDto.getEmailId());
+		customer.setName(signUpRequestDto.getName());
 		
+		//userlogin to login save
+		Login login = new Login();
+		login.setUsername(signUpRequestDto.getEmailId());
+		login.setPassword(signUpRequestDto.getPassward());
 
 		// store entity
 		userLoginEntity = userLoginRepository.save(userLoginEntity);
-		loginPage = loginPageRepository.save(loginPage);
+		customer = customerRepository.save(customer);
+		login = loginRepository.save(login);
+				
 		
 		// return
 		if (userLoginEntity != null) {
@@ -75,8 +86,12 @@ public class LoginService {
 		// validation
 
 		// verfiy user exist with given email and possward
-		Customer userLogin = loginPageRepository.findOneByUserNameAndPassword(loginRequestDto.getUsername(),
+		Login userLogin =loginRepository.findOneByUserNameAndPassword(loginRequestDto.getUsername(),
 				loginRequestDto.getPassword());
+		
+		//verfiy coustomer exist with given username
+		Customer customer = customerRepository.findByUserName(loginRequestDto.getUsername());
+		
 
 		// response
 		if (userLogin != null) {
@@ -85,8 +100,8 @@ public class LoginService {
 			String token = jwtutil.generateJwt(userLogin);
 
 			Map<Object, Object> data = new HashMap<Object, Object>();
+			data.put("UserDetiles",customer);
 			data.put("Token", token);
-			data.put("Userditels", userLogin);
 
 			apiResponse.setData(data);
 			return apiResponse;

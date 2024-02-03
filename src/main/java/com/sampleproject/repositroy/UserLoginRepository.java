@@ -19,8 +19,8 @@ public interface UserLoginRepository extends JpaRepository<UserLogin, Integer> {
 	@Query(value = "select * from user_login as ul where ul.gender =:gender",nativeQuery = true)
 	List<UserLogin> findAllByGender(List<String> gender);
 
-	@Query(value = "select * from user_login as u where u.email_id =:username",nativeQuery = true)
-	Optional<UserLogin> findByUsername(String username);
-	
+//	@Query(value = "select * from user_login as u where u.email_id =:username",nativeQuery = true)
+//	UserLogin findByUsername(String username);
+//	
 		
 }
