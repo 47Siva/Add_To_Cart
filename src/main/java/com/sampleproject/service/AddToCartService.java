@@ -98,7 +98,7 @@ public class AddToCartService {
 	// product setion
 	// get all product
 	public List<Product> getAllProducts() {
-		return this.productRepository.findAll();
+		return productRepository.findAll();
 	}
 
 }

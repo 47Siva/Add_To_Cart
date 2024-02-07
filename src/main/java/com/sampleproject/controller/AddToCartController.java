@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,11 +74,11 @@ public class AddToCartController {
 
 	// get all product api
 	@GetMapping(value = "/getAllProducts")
-	public ResponseEntity<APIResponse> getAllProducts() {
+	public APIResponse getAllProducts() {
 
 		List<Product> productList = addToCartService.getAllProducts();
 		APIResponse apiResponse = new APIResponse();
-		if (productList != null) {
+		if (!productList.isEmpty()) {
 			apiResponse.setData(productList);
 			apiResponse.setStatus(HttpStatus.OK.value());
 			apiResponse.setMessage("Products is Present");
@@ -85,12 +86,12 @@ public class AddToCartController {
 			apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
 			apiResponse.setMessage("products not found");
 		}
-		return ResponseEntity.ok(apiResponse);
+		return apiResponse;
 	}
 
 	// get oreder detiles in orde id
-	@GetMapping(value = "getById")
-	public ResponseEntity<APIResponse> getOrderDetiles(int orderId) {
+	@GetMapping(value = "getById/{id}")
+	public APIResponse getOrderDetiles(@PathVariable("id") int orderId) {
 		Order order = addToCartService.getOrderDetail(orderId);
 		APIResponse apiResponse = new APIResponse();
 
@@ -103,6 +104,6 @@ public class AddToCartController {
 			apiResponse.setMessage("Oreder Id not Found");
 		}
 
-		return ResponseEntity.ok(apiResponse);
+		return apiResponse;
 	}
 }
